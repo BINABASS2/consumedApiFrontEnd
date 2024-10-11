@@ -1,4 +1,7 @@
-img {
-    width: 950px; /* Adjust the size as needed */
-    height: 950px; /* Maintain aspect ratio */
-  }
+.logo-img {
+  display: flex;
+  justify-content: center; /* Center the logo horizontally */
+  align-items: center; /* Center the logo vertically (if needed) */
+  max-width: 8rem; /* Prevent the image from overflowing */
+  margin: 0 auto; /* Center the container itself */
+}

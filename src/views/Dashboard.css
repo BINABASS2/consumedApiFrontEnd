@@ -29,7 +29,7 @@
   
   /* Alternate row colors */
   .tablesorter tbody tr:nth-child(even) {
-    background-color: #665744;
+    background-color: #5522;
   }
   
   /* Hover effect for rows */
@@ -49,4 +49,26 @@
   top: 0;
   background-color: #f8f9fa; /* Set background color to ensure header is visible */
   z-index: 1; /* Ensure header stays on top of other content */
+}
+
+
+
+.card-chart-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
+  cursor: pointer; /* Change cursor to pointer */
+}
+
+.card-chart-hover:hover {
+  transform: scale(1.05); /* Slightly enlarge the card */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Add a shadow */
+}
+
+.card-chart-hover .card-header h5,
+.card-chart-hover .card-header h3 {
+  transition: color 0.3s ease; /* Smooth transition for text color */
+}
+
+.card-chart-hover:hover .card-header h5,
+.card-chart-hover:hover .card-header h3 {
+  color: #007bff; /* Change text color on hover */
 }

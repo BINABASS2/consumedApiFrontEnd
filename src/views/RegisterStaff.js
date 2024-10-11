@@ -1,16 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './RegisterAsset.css';
 import { Button, Card, CardBody, FormGroup, Form, Input, Row, Col } from 'reactstrap';
 
-const RegisterAsset = ({ onClose, onRegister }) => {
+const RegisterStaff = ({ onClose, onRegister, staff, isEditing }) => {
   const [formData, setFormData] = useState({
-    fullName: "",
+    full_name: "",
     contact: "",
     email: "",
-    password: "",
     role: "",
-    registeredDate: "",
+    registered_date: "", // Date will be submitted as well
   });
+
+  useEffect(() => {
+    if (isEditing && staff) {
+      // Pre-fill the form with the selected staff data when editing
+      setFormData({
+        full_name: staff.full_name,
+        contact: staff.contact,
+        email: staff.email,
+        role: staff.role,
+        registered_date: new Date(staff.registeredDate).toISOString().split('T')[0], // Format date
+      });
+    }
+  }, [isEditing, staff]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,21 +31,20 @@ const RegisterAsset = ({ onClose, onRegister }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onRegister(formData); // Send the form data to the parent component
-    setFormData({
-      fullName: "",
-      contact: "",
-      email: "",
-      password: "",
-      role: "",
-      registeredDate: "",
-    });
-    onClose();  // Close the modal after submission
+    const formattedData = {
+      full_name: formData.full_name,
+      contact: formData.contact,
+      email: formData.email,
+      role: formData.role,
+      registeredDate: new Date(formData.registered_date).toISOString(), // Format date correctly
+    };
+
+    onRegister(formattedData); // Call parent function to submit the form
   };
 
   return (
     <div className="content">
-      <h5 className="title">New Staff</h5>
+      <h5 className="title">{isEditing ? "Edit Staff" : "New Staff"}</h5>
       <Card>
         <CardBody>
           <Form onSubmit={handleSubmit}>
@@ -43,9 +54,9 @@ const RegisterAsset = ({ onClose, onRegister }) => {
                   <label>Full Name</label>
                   <Input
                     type="text"
-                    name="fullName"
+                    name="full_name"
                     placeholder="Full Name"
-                    value={formData.fullName}
+                    value={formData.full_name}
                     onChange={handleChange}
                     required
                   />
@@ -69,21 +80,8 @@ const RegisterAsset = ({ onClose, onRegister }) => {
                   <label>Contact</label>
                   <Input
                     name="contact"
-                    placeholder="contact"
+                    placeholder="Contact"
                     value={formData.contact}
-                    onChange={handleChange}
-                    required
-                  />
-                </FormGroup>
-              </Col>
-              <Col md="6">
-                <FormGroup>
-                  <label>Password</label>
-                  <Input
-                    type='password'
-                    name="password"
-                    placeholder="password"
-                    value={formData.password}
                     onChange={handleChange}
                     required
                   />
@@ -107,9 +105,9 @@ const RegisterAsset = ({ onClose, onRegister }) => {
                   <label>Registered At</label>
                   <Input
                     type="date"
-                    name="date"
-                    placeholder="date"
-                    value={formData.date}
+                    name="registered_date"
+                    placeholder="Registered Date"
+                    value={formData.registered_date}
                     onChange={handleChange}
                     required
                   />
@@ -117,7 +115,7 @@ const RegisterAsset = ({ onClose, onRegister }) => {
               </Col>
             </Row>
             <Button className="btn-fill" color="primary" type="submit">
-              Register
+              {isEditing ? "Update" : "Register"}
             </Button>
           </Form>
         </CardBody>
@@ -126,4 +124,4 @@ const RegisterAsset = ({ onClose, onRegister }) => {
   );
 };
 
-export default RegisterAsset;
+export default RegisterStaff;

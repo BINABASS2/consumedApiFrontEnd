@@ -1,111 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './Asset.css';
 import RegisterSupplier from './RegisterSupplier';
+import { getAllSuppliers, createSupplier, getSupplierById } from '../services/SupplierServices';  // Import API functions
 
 const ManageSupplier = ({ onEdit, onDelete, onView }) => {
   const [isModalOpen, setModalOpen] = useState(false);
+  const [supplierList, setSupplierList] = useState([]);
+  const [selectedSupplier, setSelectedSupplier] = useState(null); // For viewing individual supplier details
 
-  // Sample suppliers data (Initially populated with sample data)
-  const [supplierList, setSupplierList] = useState([
-    {
-      id: 1,
-      name: 'Supplier A',
-      address: '123 Supplier St, City, Country',
-      contact: '123-456-7890',
-      email: 'contact@supplierA.com',
-      serviceDate: '2024-01-15',
-    },
-    {
-      id: 2,
-      name: 'Supplier B',
-      address: '456 Supplier Ave, City, Country',
-      contact: '234-567-8901',
-      email: 'contact@supplierB.com',
-      serviceDate: '2024-02-20',
-    },
-    {
-      id: 3,
-      name: 'Supplier C',
-      address: '789 Supplier Blvd, City, Country',
-      contact: '345-678-9012',
-      email: 'contact@supplierC.com',
-      serviceDate: '2024-03-25',
-    },
-    {
-      id: 4,
-      name: 'Supplier A',
-      address: '123 Supplier St, City, Country',
-      contact: '123-456-7890',
-      email: 'contact@supplierA.com',
-      serviceDate: '2024-01-15',
-    },
-    {
-      id: 5,
-      name: 'Supplier B',
-      address: '456 Supplier Ave, City, Country',
-      contact: '234-567-8901',
-      email: 'contact@supplierB.com',
-      serviceDate: '2024-02-20',
-    },
-    {
-      id: 6,
-      name: 'Supplier C',
-      address: '789 Supplier Blvd, City, Country',
-      contact: '345-678-9012',
-      email: 'contact@supplierC.com',
-      serviceDate: '2024-03-25',
-    },
-    {
-      id: 7,
-      name: 'Supplier A',
-      address: '123 Supplier St, City, Country',
-      contact: '123-456-7890',
-      email: 'contact@supplierA.com',
-      serviceDate: '2024-01-15',
-    },
-    {
-      id: 8,
-      name: 'Supplier B',
-      address: '456 Supplier Ave, City, Country',
-      contact: '234-567-8901',
-      email: 'contact@supplierB.com',
-      serviceDate: '2024-02-20',
-    },
-    {
-      id: 9,
-      name: 'Supplier C',
-      address: '789 Supplier Blvd, City, Country',
-      contact: '345-678-9012',
-      email: 'contact@supplierC.com',
-      serviceDate: '2024-03-25',
-    },
-    {
-      id: 10,
-      name: 'Supplier A',
-      address: '123 Supplier St, City, Country',
-      contact: '123-456-7890',
-      email: 'contact@supplierA.com',
-      serviceDate: '2024-01-15',
-    },
-    {
-      id: 11,
-      name: 'Supplier B',
-      address: '456 Supplier Ave, City, Country',
-      contact: '234-567-8901',
-      email: 'contact@supplierB.com',
-      serviceDate: '2024-02-20',
-    },
-    {
-      id: 12,
-      name: 'Supplier C',
-      address: '789 Supplier Blvd, City, Country',
-      contact: '345-678-9012',
-      email: 'contact@supplierC.com',
-      serviceDate: '2024-03-25',
-    },
-    // Add more suppliers as needed
-  ]);
+  useEffect(() => {
+    // Fetch supplier data from backend when component mounts
+    getAllSuppliers()
+      .then(response => setSupplierList(response.data))
+      .catch(error => console.error('Error fetching suppliers:', error));
+  }, []);
 
   const handleAddClick = () => {
     setModalOpen(true);
@@ -113,58 +22,70 @@ const ManageSupplier = ({ onEdit, onDelete, onView }) => {
 
   const handleCloseModal = () => {
     setModalOpen(false);
+    setSelectedSupplier(null);  // Clear selected supplier when closing modal
   };
 
-  // Define the onSubmit function
   const handleFormSubmit = (newSupplier) => {
-    // Add new supplier to the supplier list
-    setSupplierList([...supplierList, { ...newSupplier, id: supplierList.length + 1 }]);
-    setModalOpen(false); // Close the modal after submission
+    createSupplier(newSupplier)
+      .then(response => {
+        setSupplierList([...supplierList, response.data]);  // Add new supplier to the list
+        setModalOpen(false);  // Close the modal after submission
+      })
+      .catch(error => console.error('Error creating supplier:', error));
+  };
+
+  const handleViewClick = (id) => {
+    getSupplierById(id)
+      .then(response => {
+        setSelectedSupplier(response.data);  // Set the selected supplier for viewing
+        setModalOpen(true);  // Open modal to view details
+      })
+      .catch(error => console.error('Error fetching supplier details:', error));
   };
 
   return (
     <div className='content'>
       <div className="asset-table-container">
-        <h1 className='h1'>Manage Supplier</h1>
+        <h1 className='supplierh1'>Manage Supplier</h1>
         <button className="add-button" onClick={handleAddClick}>ADD</button>
-        <hr/>
+        <hr />
         <div className="table-wrapper">
-        <table className="asset-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Brand Name</th>
-              <th>Address</th>
-              <th>Contact</th>
-              <th>Email</th>
-              <th>Service Date</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {supplierList.length === 0 ? (
+          <table className="asset-table">
+            <thead>
               <tr>
-                <td colSpan="7" className="no-data">No supplier found</td>
+                <th>ID</th>
+                <th>Brand Name</th>
+                <th>Address</th>
+                <th>Contact</th>
+                <th>Email</th>
+                <th>Service Date</th>
+                <th>Action</th>
               </tr>
-            ) : (
-              supplierList.map((supplier) => (
-                <tr key={supplier.id}>
-                  <td>{supplier.id}</td>
-                  <td>{supplier.name}</td>
-                  <td>{supplier.address}</td>
-                  <td>{supplier.contact}</td>
-                  <td>{supplier.email}</td>
-                  <td>{supplier.serviceDate}</td>
-                  <td>
-                    <button onClick={() => onView(supplier)}>View</button>
-                    <button onClick={() => onEdit(supplier)}>Edit</button>
-                    {/* <button onClick={() => onDelete(supplier.id)}>Delete</button> */}
-                  </td>
+            </thead>
+            <tbody>
+              {supplierList.length === 0 ? (
+                <tr>
+                  <td colSpan="7" className="no-data">No supplier found</td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                supplierList.map((supplier) => (
+                  <tr key={supplier.supplierId}>
+                    <td>{supplier.supplierId}</td>
+                    <td>{supplier.name}</td>
+                    <td>{supplier.address}</td>
+                    <td>{supplier.contact}</td>
+                    <td>{supplier.email}</td>
+                    <td>{new Date(supplier.serviceDate).toLocaleDateString()}</td>
+                    <td>
+                      <button onClick={() => handleViewClick(supplier.supplierId)}>View</button>
+                      <button onClick={() => onEdit(supplier)}>Edit</button>
+                      {/* <button onClick={() => onDelete(supplier.supplierId)}>Delete</button> */}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
 
@@ -172,7 +93,19 @@ const ManageSupplier = ({ onEdit, onDelete, onView }) => {
         <div className="modal-overlay">
           <div className="modal-content">
             <button className="close-button" onClick={handleCloseModal}>&times;</button>
-            <RegisterSupplier onSubmit={handleFormSubmit} onClose={handleCloseModal} />
+            {selectedSupplier ? (
+              <div>
+                <h2>Supplier Details</h2>
+                <p><strong>ID:</strong> {selectedSupplier.supplierId}</p>
+                <p><strong>Brand Name:</strong> {selectedSupplier.name}</p>
+                <p><strong>Address:</strong> {selectedSupplier.address}</p>
+                <p><strong>Contact:</strong> {selectedSupplier.contact}</p>
+                <p><strong>Email:</strong> {selectedSupplier.email}</p>
+                <p><strong>Service Date:</strong> {new Date(selectedSupplier.serviceDate).toLocaleDateString()}</p>
+              </div>
+            ) : (
+              <RegisterSupplier onSubmit={handleFormSubmit} onClose={handleCloseModal} />
+            )}
           </div>
         </div>
       )}

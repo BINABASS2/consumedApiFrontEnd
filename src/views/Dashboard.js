@@ -172,7 +172,7 @@ function Dashboard(props) {
                         onClick={() => setBgChartData("data1")}
                       >
                         <span className="d-none d-sm-block d-md-block d-lg-block d-xl-block">
-                          Fixed Assets
+                          Fixed Asset
                         </span>
                         <span className="d-block d-sm-none">
                           <i className="tim-icons icon-single-02" />
@@ -189,7 +189,7 @@ function Dashboard(props) {
                         onClick={() => setBgChartData("data2")}
                       >
                         <span className="d-none d-sm-block d-md-block d-lg-block d-xl-block">
-                          Non-Fixed Assets
+                          Non-Fixed Asset
                         </span>
                         <span className="d-block d-sm-none">
                           <i className="tim-icons icon-gift-2" />
@@ -206,7 +206,7 @@ function Dashboard(props) {
                         onClick={() => setBgChartData("data3")}
                       >
                         <span className="d-none d-sm-block d-md-block d-lg-block d-xl-block">
-                          Total Assets
+                          Total Staff
                         </span>
                         <span className="d-block d-sm-none">
                           <i className="tim-icons icon-tap-02" />
@@ -229,11 +229,11 @@ function Dashboard(props) {
         </Row>
         <Row>
           <Col lg="4">
-            <Card className="card-chart">
+            <Card className="card-chart card-chart-hover">
               <CardHeader>
-                <h5 className="card-category">Fixed Assets</h5>
+                <h5 className="card-category">Fixed Asset</h5>
                 <CardTitle tag="h3">
-                  <i className="tim-icons icon-bell-55 text-info" /> 155
+                  <i className="tim-icons icon-settings text-info" /> 155
                 </CardTitle>
               </CardHeader>
               <CardBody>
@@ -241,12 +241,11 @@ function Dashboard(props) {
             </Card>
           </Col>
           <Col lg="4">
-            <Card className="card-chart">
+            <Card className="card-chart card-chart-hover">
               <CardHeader>
-                <h5 className="card-category">Non-Fixed Assets</h5>
+                <h5 className="card-category">Non-Fixed Asset</h5>
                 <CardTitle tag="h3">
-                  <i className="tim-icons icon-delivery-fast text-primary" />{" "}
-                  225
+                  <i className="tim-icons icon-delivery-fast text-primary" /> 225
                 </CardTitle>
               </CardHeader>
               <CardBody>
@@ -254,11 +253,11 @@ function Dashboard(props) {
             </Card>
           </Col>
           <Col lg="4">
-            <Card className="card-chart">
+            <Card className="card-chart card-chart-hover">
               <CardHeader>
-                <h5 className="card-category">Total Assets</h5>
+                <h5 className="card-category">Total Staff</h5>
                 <CardTitle tag="h3">
-                  <i className="tim-icons icon-send text-success" /> 380
+                  <i className="tim-icons icon-badge text-success" /> 380
                 </CardTitle>
               </CardHeader>
               <CardBody>
@@ -270,7 +269,7 @@ function Dashboard(props) {
           <Col lg="6" md="12">
             <Card>
               <CardHeader>
-                <h6 className="title d-inline">Fixed Assets</h6>
+                <h6 className="title d-inline">Fixed Asset</h6>
                 <p className="card-category d-inline"> currently</p>
               </CardHeader>
               <CardBody>
@@ -306,7 +305,7 @@ function Dashboard(props) {
           <Col lg="6" md="12">
             <Card>
               <CardHeader>
-                <h6 className="title d-inline">Non-Fixed Assets</h6>
+                <h6 className="title d-inline">Non-Fixed Asset</h6>
                 <p className="card-category d-inline"> currently</p>
               </CardHeader>
               <CardBody>

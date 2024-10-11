@@ -5,6 +5,7 @@ import PerfectScrollbar from "perfect-scrollbar";
 import { Nav } from "reactstrap";
 import { BackgroundColorContext } from "contexts/BackgroundColorContext";
 import './Sidebar.css';
+import hmylogo from 'assets/img/hmylogo.png'; // Correctly import the logo
 
 var ps;
 
@@ -38,9 +39,9 @@ function Sidebar(props) {
       logoImg = (
         <a href={logo.outterLink} className="logo-img">
           <img
-            src={logo.imgSrc}
+            src={hmylogo} // Use the imported logo here
             alt="inventory-logo"
-            style={{ width: '200px', height: 'auto' }} // Adjust the width and height as needed
+            style={{ width: '300px', height: 'auto' }} // Modify the width and height here
           />
         </a>
       );
@@ -53,9 +54,9 @@ function Sidebar(props) {
         >
           <div className="logo-img">
             <img
-              src={logo.imgSrc}
+              src={logo.imgSrc || hmylogo}  // Fallback to hmylogo if logo.imgSrc is not provided
               alt="react-logo"
-              style={{ width: '150px', height: 'auto' }} // Adjust the width and height as needed
+              style={{ width: '950px', height: 'auto' }}  // Adjust the size
             />
           </div>
         </Link>
@@ -77,13 +78,10 @@ function Sidebar(props) {
       {({ color }) => (
         <div className="sidebar" data={color}>
           <div className="sidebar-wrapper" ref={sidebarRef}>
-            {logoImg !== null || logoText !== null ? (
-              <div className="logo">
-                {logoImg}
-                {logoText}
-              </div>
-            ) : null}
             <Nav>
+            {logoImg}
+            {logoText}
+            <hr/>
               {routes.map((prop, key) => {
                 if (prop.redirect) return null;
                 return (

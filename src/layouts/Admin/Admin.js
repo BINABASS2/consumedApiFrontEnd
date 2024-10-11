@@ -84,18 +84,23 @@ function Admin(props) {
       {({ color, changeColor }) => (
         <React.Fragment>
           <div className="wrapper">
-            <Sidebar
-              routes={routes}
-              logo={{
-                text: "Inventory",
-                imgSrc: hmylogo,
-                imgStyle: {
-                  width: '200px',  // Ensure the logo is sufficiently large
-                  height: 'auto',  // Maintain aspect ratio
-                },
-              }}
-              toggleSidebar={toggleSidebar}
-            />
+          <Sidebar
+            routes={routes}
+            logo={{
+              imgSrc: hmylogo,
+              imgStyle: {
+                maxWidth: '100%', // Fill available width
+                height: 'auto', // Maintain aspect ratio
+                maxHeight: '150px', // Set a maximum height to ensure no overflow
+              },
+              text: (
+                <div style={{ marginTop: '10px', color: 'white', fontSize: '33px', fontWeight: 'bold', textAlign: 'center' }}>
+                  Inventory
+                </div>
+              ),
+            }}
+            toggleSidebar={toggleSidebar}
+          />
             <div className="main-panel" ref={mainPanelRef} data={color}>
               <AdminNavbar
                 brandText={getBrandText(location.pathname)}

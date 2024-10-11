@@ -14,6 +14,28 @@
   text-decoration: underline;
 }
 
+.asseth1 {
+  text-align: center;
+  color: #2C3E50; /* Dark blue-grey */
+  font-weight: 900;
+  text-decoration: underline;
+}
+
+.staffh1 {
+  text-align: center;
+  color: #E74C3C; /* Dark red */
+  font-weight: 900;
+  text-decoration: underline;
+}
+
+.supplierh1 {
+  text-align: center;
+  color: #27AE60; /* Dark green */
+  font-weight: 900;
+  text-decoration: underline;
+}
+
+
 .add-button {
   padding: 10px 30px;
   margin: 5px;
@@ -117,6 +139,92 @@
       font-size: 12px;
   }
 }
+
+
+/* MODAL POPUP TO VIEW STAFF BY ID */
+
+/* Modal overlay background */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Make sure it appears above everything */
+}
+
+/* Modal content box */
+.modal-content {
+  background-color: #fff; /* White background */
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px; /* Set a fixed width */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+  animation: fadeIn 0.3s ease; /* Fade-in animation */
+  position: relative;
+  text-align: left; /* Align text to the left */
+}
+
+/* Close button */
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #555;
+}
+
+.close-button:hover {
+  color: #000; /* Darker color on hover */
+}
+
+/* Header styling */
+.modal-content h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #333; /* Darker text for title */
+  border-bottom: 2px solid #f0f0f0; /* Light bottom border */
+  padding-bottom: 10px;
+}
+
+/* Paragraph styling */
+.modal-content p {
+  margin: 10px 0;
+  font-size: 16px;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* Bold labels for staff details */
+.modal-content p strong {
+  font-weight: 600;
+  color: #333;
+}
+
+/* Responsive behavior */
+@media (max-width: 500px) {
+  .modal-content {
+    width: 90%; /* Take more space on smaller screens */
+  }
+}
+
+/* Simple fade-in animation for modal */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 
   
   

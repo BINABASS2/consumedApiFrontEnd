@@ -1,162 +1,89 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './Asset.css';
 import RegisterStaff from './RegisterStaff';
+import { getAllStaff, createStaff, getStaffById, updateStaff } from '../services/StaffService'; // Import the service functions
 
-const ManageStaff = ({ onEdit, onDelete, onView }) => {
+const ManageStaff = ({ onEdit, onDelete }) => {
   const [isModalOpen, setModalOpen] = useState(false);
+  const [staffList, setStaffList] = useState([]);
+  const [selectedStaff, setSelectedStaff] = useState(null); // State for the selected staff
+  const [isAdding, setIsAdding] = useState(false); // To differentiate between Add and Edit mode
+  const [isEditing, setIsEditing] = useState(false); // To handle editing mode
 
-  // Sample staff data (Initially populated with sample data)
-  const [staffList, setStaffList] = useState([
-    {
-      id: 1,
-      fullName: 'Da Mam',
-      contact: "0628622621",
-      email: 'john.doe@example.com',
-      password: 'password123',
-      role: 'Secretary',
-      registeredDate: '2024-01-15',
-    },
-    {
-      id: 2,
-      fullName: 'Rashid',
-      contact: "0618622621",
-      email: 'jane.smith@example.com',
-      password: 'password456',
-      role: 'Asset Manager',
-      registeredDate: '2024-02-20',
-    },
-    {
-      id: 3,
-      fullName: 'Laupaa',
-      contact: "0718622621",
-      email: 'emily.johnson@example.com',
-      password: 'password789',
-      role: 'IT Support',
-      registeredDate: '2024-03-25',
-    },
-    {
-      id: 4,
-      fullName: 'Abdibeker',
-      contact: "0718622621",
-      email: 'emily.johnson@example.com',
-      password: 'password789',
-      role: 'Senior Developer',
-      registeredDate: '2024-03-25',
-    },
-    {
-      id: 5,
-      fullName: 'Ridh-one',
-      contact: "0718622621",
-      email: 'emily.johnson@example.com',
-      password: 'mr-password',
-      role: 'Senior Developer',
-      registeredDate: '2024-03-25',
-    },
-    {
-      id: 6,
-      fullName: 'Salma',
-      contact: "0718622621",
-      email: 'emily.johnson@example.com',
-      password: 'password789',
-      role: 'Coordinator',
-      registeredDate: '2024-03-25',
-    },
-    {
-      id: 7,
-      fullName: 'Umama',
-      contact: "0718622621",
-      email: 'emily.johnson@example.com',
-      password: 'password789',
-      role: 'Senior Developer',
-      registeredDate: '2024-03-25',
-    },
-    {
-      id: 8,
-      fullName: 'Hemed',
-      contact: "0718622621",
-      email: 'emily.johnson@example.com',
-      password: 'password789',
-      role: 'Senior Developer',
-      registeredDate: '2024-03-25',
-    },
-    {
-      id: 9,
-      fullName: 'Ibrahim',
-      contact: "0718622621",
-      email: 'emily.johnson@example.com',
-      password: 'zarau-mbayaaa',
-      role: 'Junior Developer',
-      registeredDate: '2024-03-25',
-    },
-    {
-      id: 10,
-      fullName: 'Hafwa',
-      contact: "0718622621",
-      email: 'emily.johnson@example.com',
-      password: 'password789',
-      role: 'Junior Developer',
-      registeredDate: '2024-03-25',
-    },
-    {
-      id: 11,
-      fullName: 'Suleiman',
-      contact: "0718622621",
-      email: 'emily.johnson@example.com',
-      password: 'debuger',
-      role: 'Junior Developer',
-      registeredDate: '2024-03-25',
-    },
-    {
-      id: 12,
-      fullName: 'Mwitax',
-      contact: "0718622621",
-      email: 'emily.johnson@example.com',
-      password: 'laupaaa',
-      role: 'Junior Developer',
-      registeredDate: '2024-03-25',
-    },
-    {
-      id: 13,
-      fullName: 'Abdul-latif',
-      contact: "0718622621",
-      email: 'emily.johnson@example.com',
-      password: 'bin@b@ss',
-      role: 'Junior Developer',
-      registeredDate: '2024-03-25',
-    },
-    // Add more staff as needed
-  ]);
+  useEffect(() => {
+    // Fetch staff data from the back-end when the component mounts
+    getAllStaff()
+      .then(response => setStaffList(response.data))
+      .catch(error => console.error('Error fetching staff data:', error));
+  }, []);
 
   const handleAddClick = () => {
-    setModalOpen(true);
+    setIsAdding(true);  // Set adding mode
+    setIsEditing(false); // Disable editing mode
+    setModalOpen(true);  // Open the modal
+  };
+
+  const handleEditClick = (staff) => {
+    setSelectedStaff(staff);  // Set the selected staff for editing
+    setIsAdding(false);  // Disable adding mode
+    setIsEditing(true);  // Enable editing mode
+    setModalOpen(true);  // Open the modal
   };
 
   const handleCloseModal = () => {
     setModalOpen(false);
+    setSelectedStaff(null);  // Reset selected staff when closing modal
+    setIsAdding(false);  // Reset adding mode
+    setIsEditing(false); // Reset editing mode
   };
 
-  // Define the onSubmit function
-  const handleFormSubmit = (newStaff) => {
-    setStaffList([...staffList, { ...newStaff, id: staffList.length + 1 }]);
-    setModalOpen(false); // Close the modal after submission
+  const handleFormSubmit = (staffData) => {
+    if (isEditing && selectedStaff) {
+      // Call the updateStaff function for editing
+      updateStaff(selectedStaff.id, staffData)
+        .then(response => {
+          setStaffList(staffList.map(staff => staff.id === response.data.id ? response.data : staff));  // Update the state with the edited staff
+          setModalOpen(false);  // Close the modal after submission
+        })
+        .catch(error => console.error('Error updating staff:', error));
+    } else {
+      // Add new staff to the back-end
+      createStaff(staffData)
+        .then(response => {
+          setStaffList([...staffList, response.data]);  // Update the state with the new staff
+          setModalOpen(false);  // Close the modal after submission
+        })
+        .catch(error => console.error('Error creating staff:', error));
+    }
+  };
+
+  const handleViewClick = (id) => {
+    setSelectedStaff(null);
+    setIsAdding(false);  // Set view mode
+    
+    getStaffById(id)
+      .then(response => {
+        setSelectedStaff(response.data);  // Set the selected staff to state
+        setModalOpen(true);               // Open the modal after data is loaded
+      })
+      .catch(error => console.error('Error fetching staff details:', error));
   };
 
   return (
     <div className='content'>
       <div className="asset-table-container">
-        <h1 className='h1'>Manage Staff</h1>
+        <h1 className='staffh1'>Manage Staff</h1>
         <button className="add-button" onClick={handleAddClick}>ADD</button>
         <hr />
         <div className="table-wrapper">
-           <table className="asset-table">
+          <table className="asset-table">
             <thead>
               <tr>
                 <th>ID</th>
                 <th>Full Name</th>
                 <th>Contact</th>
                 <th>Email</th>
-                <th>Password</th>
                 <th>Role</th>
                 <th>Registered Date</th>
                 <th>Action</th>
@@ -165,22 +92,20 @@ const ManageStaff = ({ onEdit, onDelete, onView }) => {
             <tbody>
               {staffList.length === 0 ? (
                 <tr>
-                  <td colSpan="8" className="no-data">No staff found</td>
+                  <td colSpan="7" className="no-data">No staff found</td>
                 </tr>
               ) : (
                 staffList.map((staff) => (
                   <tr key={staff.id}>
                     <td>{staff.id}</td>
-                    <td>{staff.fullName}</td>
+                    <td>{staff.full_name}</td>
                     <td>{staff.contact}</td>
                     <td>{staff.email}</td>
-                    <td>{staff.password}</td>
                     <td>{staff.role}</td>
-                    <td>{staff.registeredDate}</td>
+                    <td>{new Date(staff.registeredDate).toLocaleDateString()}</td>
                     <td>
-                      <button onClick={() => onView(staff)}>View</button>
-                      <button onClick={() => onEdit(staff)}>Edit</button>
-                      {/* <button onClick={() => onDelete(staff.id)}>Delete</button> */}
+                      <button onClick={() => handleViewClick(staff.id)}>View</button>
+                      <button onClick={() => handleEditClick(staff)}>Edit</button> {/* Edit button */}
                     </td>
                   </tr>
                 ))
@@ -194,7 +119,32 @@ const ManageStaff = ({ onEdit, onDelete, onView }) => {
         <div className="modal-overlay">
           <div className="modal-content">
             <button className="close-button" onClick={handleCloseModal}>&times;</button>
-            <RegisterStaff onSubmit={handleFormSubmit} onClose={handleCloseModal} />
+            
+            {isAdding ? (
+              // Show the RegisterStaff form for adding a new staff
+              <RegisterStaff onClose={handleCloseModal} onRegister={handleFormSubmit} />
+            ) : isEditing && selectedStaff ? (
+              // Show the RegisterStaff form for editing the selected staff
+              <RegisterStaff
+                onClose={handleCloseModal}
+                onRegister={handleFormSubmit}
+                staff={selectedStaff}  // Pass the selected staff data for editing
+                isEditing={true}       // Set edit mode to true
+              />
+            ) : selectedStaff ? (
+              // Show the staff details for viewing
+              <div>
+                <h2>Staff Details</h2>
+                <p><strong>ID:</strong> {selectedStaff.id}</p>
+                <p><strong>Full Name:</strong> {selectedStaff.full_name}</p>
+                <p><strong>Contact:</strong> {selectedStaff.contact}</p>
+                <p><strong>Email:</strong> {selectedStaff.email}</p>
+                <p><strong>Role:</strong> {selectedStaff.role}</p>
+                <p><strong>Registered Date:</strong> {new Date(selectedStaff.registeredDate).toLocaleDateString()}</p>
+              </div>
+            ) : (
+              <div>Loading staff details...</div>  // Display loading message while data is being fetched
+            )}
           </div>
         </div>
       )}
@@ -205,7 +155,6 @@ const ManageStaff = ({ onEdit, onDelete, onView }) => {
 ManageStaff.propTypes = {
   onEdit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
-  onView: PropTypes.func.isRequired,
 };
 
 ManageStaff.defaultProps = {

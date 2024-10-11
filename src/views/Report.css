@@ -1,11 +1,11 @@
-#report{
+#reporth1{
     text-align: center;
     text-decoration: underline;
-    
+    font-weight: 900;
+    color: #E74C; /* Dark red */
 }
 
 .asset-list-container{
-    /* background-color: white; */
     height: 40px;
 }
 

@@ -3,146 +3,25 @@ import PropTypes from 'prop-types';
 import './Asset.css';
 import Modal from './Modal';  // Import the Modal component
 import RegisterAsset from './RegisterAsset';  // Import the RegisterAsset component
+import { getAllAsset } from 'services/assetService';
+// import { useEffect } from 'react/cjs/react.production.min';
 
 const FixedAsset = ({ onEdit, onDelete, onView, onAdd }) => {
   const [isModalOpen, setModalOpen] = useState(false);
 
   // Sample assets data (Initial state populated with sample data)
-  const [assets, setAssets] = useState([
-    {
-      id: '1',
-      name: 'Asset 1',
-      type: 'Fixed',
-      description: 'Asset 1 Description',
-      value: 1000,
-      purchaseDate: '2024-01-10',
-      status: 'Active',
-      quantity: 10,
-      supplier: 'Supplier A',
-    },
-    {
-      id: '2',
-      name: 'Asset 2',
-      type: 'Variable',
-      description: 'Asset 2 Description',
-      value: 2000,
-      purchaseDate: '2024-02-15',
-      status: 'Inactive',
-      quantity: 5,
-      supplier: 'Supplier B',
-    },
-    {
-      id: '3',
-      name: 'Asset 3',
-      type: 'Fixed',
-      description: 'Asset 3 Description',
-      value: 5000,
-      purchaseDate: '2024-03-20',
-      status: 'Active',
-      quantity: 20,
-      supplier: 'Supplier C',
-    },
-    {
-      id: '4',
-      name: 'Asset 1',
-      type: 'Fixed',
-      description: 'Asset 1 Description',
-      value: 1000,
-      purchaseDate: '2024-01-10',
-      status: 'Active',
-      quantity: 10,
-      supplier: 'Supplier A',
-    },
-    {
-      id: '5',
-      name: 'Asset 2',
-      type: 'Variable',
-      description: 'Asset 2 Description',
-      value: 2000,
-      purchaseDate: '2024-02-15',
-      status: 'Inactive',
-      quantity: 5,
-      supplier: 'Supplier B',
-    },
-    {
-      id: '6',
-      name: 'Asset 3',
-      type: 'Fixed',
-      description: 'Asset 3 Description',
-      value: 5000,
-      purchaseDate: '2024-03-20',
-      status: 'Active',
-      quantity: 20,
-      supplier: 'Supplier C',
-    },
-    {
-      id: '7',
-      name: 'Asset 1',
-      type: 'Fixed',
-      description: 'Asset 1 Description',
-      value: 1000,
-      purchaseDate: '2024-01-10',
-      status: 'Active',
-      quantity: 10,
-      supplier: 'Supplier A',
-    },
-    {
-      id: '8',
-      name: 'Asset 2',
-      type: 'Variable',
-      description: 'Asset 2 Description',
-      value: 2000,
-      purchaseDate: '2024-02-15',
-      status: 'Inactive',
-      quantity: 5,
-      supplier: 'Supplier B',
-    },
-    {
-      id: '9',
-      name: 'Asset 3',
-      type: 'Fixed',
-      description: 'Asset 3 Description',
-      value: 5000,
-      purchaseDate: '2024-03-20',
-      status: 'Active',
-      quantity: 20,
-      supplier: 'Supplier C',
-    },
-    {
-      id: '10',
-      name: 'Asset 1',
-      type: 'Fixed',
-      description: 'Asset 1 Description',
-      value: 1000,
-      purchaseDate: '2024-01-10',
-      status: 'Active',
-      quantity: 10,
-      supplier: 'Supplier A',
-    },
-    {
-      id: '11',
-      name: 'Asset 2',
-      type: 'Variable',
-      description: 'Asset 2 Description',
-      value: 2000,
-      purchaseDate: '2024-02-15',
-      status: 'Inactive',
-      quantity: 5,
-      supplier: 'Supplier B',
-    },
-    {
-      id: '12',
-      name: 'Asset 3',
-      type: 'Fixed',
-      description: 'Asset 3 Description',
-      value: 5000,
-      purchaseDate: '2024-03-20',
-      status: 'Active',
-      quantity: 20,
-      supplier: 'Supplier C',
-    },
-    // Add more assets as needed
-  ]);
+  const [assets, setAssets] = useState([]);
+
+  // useEffect(() =>{
+  //   getAsset();
+  // }, []);
+
+  const getAsset = () =>  {
+
+    getAllAsset().then((response) => {
+      setAssets(response.data);
+    }).catch( error => console.error(error));
+  } 
 
   const handleOpenModal = () => {
     setModalOpen(true);
@@ -161,7 +40,7 @@ const FixedAsset = ({ onEdit, onDelete, onView, onAdd }) => {
   return (
     <div className='content'>
       <div className="asset-table-container">
-        <h1 className='h1'>Manage Asset</h1>
+        <h1 className='asseth1'>Manage Asset</h1>
         <button className="add-button" onClick={handleOpenModal}>ADD</button>
         <hr/>
         <div className="table-wrapper">
@@ -172,9 +51,10 @@ const FixedAsset = ({ onEdit, onDelete, onView, onAdd }) => {
                 <th>Name</th>
                 <th>Type</th>
                 <th>Description</th>
-                <th>Value</th>
+                <th>Cost</th>
                 <th>Purchase Date</th>
                 <th>Status</th>
+                <th>Category</th>
                 <th>Quantity</th>
                 <th>Supplier</th>
                 <th>Actions</th>
@@ -183,7 +63,7 @@ const FixedAsset = ({ onEdit, onDelete, onView, onAdd }) => {
             <tbody>
               {assets.length === 0 ? (
                 <tr>
-                  <td colSpan="7" className="no-data">No assets found</td>
+                  <td colSpan="8" className="no-data">No assets found</td>
                 </tr>
               ) : (
                 assets.map((asset) => ( 
@@ -192,7 +72,7 @@ const FixedAsset = ({ onEdit, onDelete, onView, onAdd }) => {
                     <td>{asset.name}</td>
                     <td>{asset.type}</td>
                     <td>{asset.description}</td>
-                    <td>{asset.value}</td>
+                    <td>{asset.cost}</td>
                     <td>{asset.purchaseDate}</td>
                     <td>{asset.status}</td>
                     <td>{asset.quantity}</td>

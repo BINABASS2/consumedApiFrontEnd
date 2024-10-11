@@ -36,9 +36,19 @@ const RegisterAsset = ({ onClose, onRegister }) => {
   return (
     <div className="content">
       <h5 className="title">Register Asset</h5>
+      <Button onClick={onClose} 
+        color="secondary" 
+        style={{ 
+          fontSize: '15px',
+          height: '50px',
+          // cursor: 'pointer',
+          // fontWeight: 'bold',
+        }}>Close
+      </Button>
+
       <Card>
         <CardBody>
-          <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit}>
             <Row>
               <Col md="6">
                 <FormGroup>
@@ -115,6 +125,19 @@ const RegisterAsset = ({ onClose, onRegister }) => {
                     name="status"
                     placeholder="Status"
                     value={formData.status}
+                    onChange={handleChange}
+                    required
+                  />
+                </FormGroup>
+              </Col>
+              <Col md="6">
+                <FormGroup>
+                  <label>Category</label>
+                  <Input
+                    type="text"
+                    name="status"
+                    placeholder="Category"
+                    value={formData.category}
                     onChange={handleChange}
                     required
                   />
